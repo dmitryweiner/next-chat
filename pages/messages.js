@@ -1,31 +1,26 @@
 import Link from "next/link";
 import React, {useEffect, useState} from "react";
-import {messages} from "../store";
+import {withRedux} from "../redux/redux";
+import {useDispatch, useSelector} from "react-redux";
+import {sendMessage, fetchMessages} from "../redux/reduxStore";
 
-function Messages({messages}) {
-  const [actualMessages, setMessages] = useState(messages);
+function Messages() {
+  const dispatch = useDispatch();
+  const messages = useSelector(state => state.messages);
   const [nick, setNick] = useState("");
   const [content, setContent] = useState("");
-
-  const fetchData = async () => {
-    const res = await fetch("/api/messages");
-    const messages = await res.json();
-    setMessages(messages);
-  };
 
   const sendData = async (event) => {
     const message = {
       nick,
       content
     };
-    const res = await fetch("/api/messages/send", {method: "post", body: JSON.stringify(message)});
-    const messages = await res.json();
-    setMessages(messages);
+    dispatch(sendMessage(message));
     setContent("");
   };
 
   useEffect(() => {
-    const intervalID = setInterval(fetchData, 1000);
+    const intervalID = setInterval(() => dispatch(fetchMessages()), 1000);
     return () => clearInterval(intervalID);
   }, []);
 
@@ -33,7 +28,7 @@ function Messages({messages}) {
     <Link href="/"><a>Back</a></Link>
     <div>
       <ul>
-        {actualMessages.map((message, index) => (<li key={index}>{message.nick}: {message.content}</li>))}
+        {messages.map((message, index) => (<li key={index}>{message.nick}: {message.content}</li>))}
       </ul>
     </div>
     <div>
@@ -56,12 +51,4 @@ function Messages({messages}) {
     </>;
 }
 
-export function getStaticProps() {
-  return {
-    props: {
-      messages,
-    }
-  };
-}
-
-export default Messages;
+export default withRedux(Messages);
