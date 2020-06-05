@@ -20,7 +20,7 @@ function Messages() {
   };
 
   useEffect(() => {
-    const intervalID = setInterval(() => dispatch(fetchMessages()), 1000);
+    const intervalID = setInterval(() => dispatch(fetchMessages()), 5000);
     return () => clearInterval(intervalID);
   }, []);
 
