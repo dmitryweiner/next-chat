@@ -21,7 +21,7 @@ function Messages({messages}) {
     const res = await fetch("/api/messages/send", {method: "post", body: JSON.stringify(message)});
     const messages = await res.json();
     setMessages(messages);
-    event.preventDefault();
+    setContent("");
   };
 
   useEffect(() => {
