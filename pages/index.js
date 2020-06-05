@@ -10,11 +10,8 @@ export default function Home() {
       </Head>
 
       <main>
-        <h1 className="title">
-          Next.js chat
-        </h1>
-        <Link href="/form">Create message</Link>
-        <Link href="/messages">Read messages</Link>
+        <Link href="/viewStore"><a>View store</a></Link>
+        <Link href="/messages"><a>Chat</a></Link>
       </main>
       <style jsx>{`
         .container {
